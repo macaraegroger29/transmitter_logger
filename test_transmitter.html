@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Transmitter Monitor</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        td {
+            padding: 8px;
+        }
+
+        input {
+            width: 80px;
+            text-align: right;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Transmitter Status</h2>
+    <p><small id="update-time">Last updated: Never</small></p>
+
+    <table border="1">
+
+        <tr>
+            <td>FORWARD POWER</td>
+            <td><input id="fwd_pwr" value="1000"></td>
+        </tr>
+
+        <tr>
+            <td>REVERSE POWER</td>
+            <td><input id="rev_pwr" value="0.2"></td>
+        </tr>
+
+        <tr>
+            <td>AMP VOLTAGE</td>
+            <td><input id="amp_v" value="47.9"></td>
+        </tr>
+
+        <tr>
+            <td>AMP CURRENT</td>
+            <td><input id="amp_i" value="22.8"></td>
+        </tr>
+
+        <tr>
+            <td>AMP TEMPERATURE</td>
+            <td><input id="amp_t" value="23"></td>
+        </tr>
+
+    </table>
+
+    <script>
+        function randomize() {
+            // Generate some "realistic" random values
+            document.getElementById('fwd_pwr').value = (950 + Math.random() * 100).toFixed(1);
+            document.getElementById('rev_pwr').value = (Math.random() * 0.5).toFixed(2);
+            document.getElementById('amp_v').value = (47.5 + Math.random() * 1).toFixed(1);
+            document.getElementById('amp_i').value = (22.5 + Math.random() * 1).toFixed(1);
+            document.getElementById('amp_t').value = (20 + Math.random() * 10).toFixed(1);
+
+            document.getElementById('update-time').innerText = "Last updated: " + new Date().toLocaleTimeString();
+        }
+
+        // Initial randomization
+        randomize();
+
+        // Update every 1 minute (60,000 ms)
+        setInterval(randomize, 60000);
+    </script>
+
+</body>
+
+</html>
