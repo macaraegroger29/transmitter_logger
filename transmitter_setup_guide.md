@@ -7,58 +7,60 @@ This guide provides step-by-step instructions to set up the Transmitter Logger o
 ### 1. Prerequisites
 - **Python**: Install Python 3.10+ from [python.org](https://www.python.org/).
 - **Google Chrome**: Ensure you have the Chrome browser installed.
-- **Chrome WebDriver**: Modern Selenium versions (4.6+) handle this automatically, so no separate download is usually needed.
+- **Chrome WebDriver**: Handled automatically by Selenium 4.6+.
 
 ---
 
-### 2. Environment Setup
-It is best practice to use a **Virtual Environment (venv)** to keep your global Python installation clean.
+### 2. Environment Setup (Recommended)
+Using a **Virtual Environment (venv)** prevents conflicts with other Python projects.
 
-1.  **Open your terminal/command prompt** in the project folder.
-2.  **Create the environment**:
-    ```powershell
-    python -m venv .venv
-    ```
-3.  **Activate the environment**:
+1.  **Open terminal** in the project folder.
+2.  **Create venv**: `python -m venv .venv`
+3.  **Activate**:
     - **Windows**: `.venv\Scripts\activate`
     - **Mac/Linux**: `source .venv/bin/activate`
 
 ---
 
 ### 3. Install Required Libraries
-Once the environment is active, install the necessary Python packages:
-
 ```powershell
 pip install selenium pandas schedule
 ```
 
 ---
 
-### 4. Project Structure
-Ensure your folder contains these two primary files:
-- `transmitter_logger.py`: The Python script (renamed from `transmitter_logger` to include the `.py` extension).
-- `test_transmitter.html`: The HTML status page you want to monitor.
-
----
-
-### 5. Running the Script
-Run the script using the Python interpreter:
-
+### 4. Running the Script
 ```powershell
 python transmitter_logger.py
 ```
 
 ---
 
-### 6. Key Troubleshooting Tips
-| Issue | Solution |
-| :--- | :--- |
-| **"Could not find import..."** | Ensure the file has a `.py` extension and you've selected the correct Python interpreter in your editor. |
-| **"ModuleNotFoundError"** | You haven't installed the `pip` packages in the *current* active environment. Run the install command again. |
-| **File Path Errors** | The script uses `os.path` to find the HTML file. Ensure the `.html` file is in the same folder as the `.py` script. |
-| **Browser Fails to Open** | Ensure Chrome is installed. Selenium will automatically download the correct driver. |
+### 5. Customizing the Script
+You can modify these settings directly in `transmitter_logger.py`:
+
+#### ⏱️ Changing the Timer
+Find the **TIMER CONFIGURATION** section at the bottom:
+```python
+schedule.every(1).minutes.do(read_transmitter) # Change '1' or 'minutes' (e.g. .hours)
+```
+
+#### 👁️ Visible vs. Invisible (Headless) Mode
+By default, the script runs in "Headless" (invisible) mode. To see the browser window:
+- Find `options.add_argument('--headless')` and add a `#` at the start to comment it out.
 
 ---
 
-### 7. File Renaming (Crucial)
-If you are moving this from a system where the file was just called `transmitter_logger`, **always rename it** to `transmitter_logger.py`. Python scripts must have the `.py` extension for standard execution and IDE support.
+### 6. Key Troubleshooting Tips
+
+| Issue | Solution |
+| :--- | :--- |
+| **"Permission denied: transmitter_log.csv"** | **VERY COMMON:** You have the CSV open in **Excel**. Excel locks the file. **Close Excel** and the script will resume saving. |
+| **"Could not find import..."** | Ensure your editor is using the correct Python interpreter (Ctrl+Shift+P > Select Interpreter). |
+| **"ModuleNotFoundError"** | You haven't installed the libraries. Run `pip install...` while your environment is active. |
+| **Browser doesn't start** | Ensure Google Chrome is installed on the computer. |
+
+---
+
+### 7. File Portability
+The script uses `os.path` to find `test_transmitter.html`. Simply keep both the `.py` script and the `.html` file in the **same folder**, and it will work regardless of which computer or folder path you use.
