@@ -5,9 +5,25 @@ import pandas as pd
 import time
 import schedule
 from datetime import datetime
+import requests
 
 # --- CONFIGURATION ---
 URL = "http://192.168.1.14/index.shtml"
+
+# --- TELEGRAM CONFIGURATION ---
+BOT_TOKEN = "8561232630:AAE9MmFmcpp5G_SOdlsFqQwfPwOywjeKW-E"
+CHAT_ID = "5393661292"
+
+def send_telegram_message(message):
+    if CHAT_ID == "YOUR_CHAT_ID":
+        return # Skip if not configured
+    
+    url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
+    data = {"chat_id": CHAT_ID, "text": message}
+    try:
+        requests.post(url, data=data)
+    except Exception as e:
+        print(f"⚠️ Telegram Notify Failed: {e}")
 
 def read_transmitter():
     # --- BROWSER CONFIGURATION ---
@@ -45,12 +61,25 @@ def read_transmitter():
         try:
             file_exists = os.path.isfile(log_file)
             df.to_csv(log_file, mode="a", header=not file_exists, index=False)
+            
+            success_msg = (
+                f"📊 *Transmitter Data Logged*\n"
+                f"Time: {data['Time']}\n"
+                f"FWD: {data['Forward Power (W)']} W\n"
+                f"REV: {data['Reverse Power (W)']} W\n"
+                f"AMP Voltage: {data['Voltage (V)']} V\n"
+                f"AMP Current: {data['Current (A)']} A\n"
+                f"AMP Temp: {data['Temperature (C)']} °C"
+            )
             print(f"[{data['Time']}] Data Logged Successfully.")
+            send_telegram_message(success_msg)
         except PermissionError:
             print(f"⚠️  WARNING: Could not save data. Please CLOSE 'transmitter_log.csv' in Excel!")
 
     except Exception as e:
-        print(f"❌ Error during data collection: {e}")
+        error_msg = f"❌ Error during data collection: {e}"
+        print(error_msg)
+        send_telegram_message(error_msg)
     finally:
         driver.quit()
 
@@ -61,6 +90,7 @@ schedule.every(1).hours.do(read_transmitter)
 
 # Initial run to verify it works upon starting
 print("Starting Transmitter Monitor...")
+send_telegram_message("🔌 Transmitter logger connected and monitoring...")
 read_transmitter()
 
 while True:

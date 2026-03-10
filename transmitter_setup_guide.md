@@ -24,7 +24,7 @@ Using a **Virtual Environment (venv)** prevents conflicts with other Python proj
 
 ### 3. Install Required Libraries
 ```powershell
-pip install selenium pandas schedule
+pip install selenium pandas schedule requests
 ```
 
 ---
