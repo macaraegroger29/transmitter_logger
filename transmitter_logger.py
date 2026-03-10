@@ -15,7 +15,7 @@ BOT_TOKEN = "8561232630:AAE9MmFmcpp5G_SOdlsFqQwfPwOywjeKW-E"
 CHAT_ID = "5393661292"
 
 def send_telegram_message(message):
-    if CHAT_ID == "5393661292":
+    if CHAT_ID == "YOUR_CHAT_ID":
         return # Skip if not configured
     
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
