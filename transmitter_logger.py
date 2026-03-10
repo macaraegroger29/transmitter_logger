@@ -6,9 +6,8 @@ import time
 import schedule
 from datetime import datetime
 
-# Get the absolute path to the HTML file in the same directory as this script
-current_dir = os.path.dirname(os.path.abspath(__file__))
-URL = f"file:///{os.path.join(current_dir, 'test_transmitter.html')}"
+# --- CONFIGURATION ---
+URL = "http://192.168.1.14/index.shtml"
 
 def read_transmitter():
     # --- BROWSER CONFIGURATION ---
@@ -21,7 +20,7 @@ def read_transmitter():
     
     try:
         driver.get(URL)
-        time.sleep(5) # Give the page JS time to randomize values
+        time.sleep(3) # Give the page time to load
 
         # Read values (Selectors updated for more stability)
         forward_power = driver.find_element(By.XPATH, "//td[contains(text(),'FORWARD POWER')]/following::input[1]").get_attribute("value")
@@ -58,7 +57,7 @@ def read_transmitter():
 # --- TIMER CONFIGURATION ---
 # Change the value below to adjust how often data is recorded.
 # Options: .minutes, .hours, .days (examples: .every(30).minutes or .every(1).hours)
-schedule.every(1).minutes.do(read_transmitter)
+schedule.every(1).hours.do(read_transmitter)
 
 # Initial run to verify it works upon starting
 print("Starting Transmitter Monitor...")

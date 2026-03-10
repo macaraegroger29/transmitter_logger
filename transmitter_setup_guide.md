@@ -62,5 +62,5 @@ By default, the script runs in "Headless" (invisible) mode. To see the browser w
 
 ---
 
-### 7. File Portability
-The script uses `os.path` to find `test_transmitter.html`. Simply keep both the `.py` script and the `.html` file in the **same folder**, and it will work regardless of which computer or folder path you use.
+### 7. Connection details
+The script is configured to connect to the transmitter at **http://192.168.1.14/index.shtml**. Ensure your computer is on the same network as the transmitter to allow data collection.
