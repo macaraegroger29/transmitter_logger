@@ -62,5 +62,20 @@ By default, the script runs in "Headless" (invisible) mode. To see the browser w
 
 ---
 
-### 7. Connection details
-The script is configured to connect to the transmitter at **http://192.168.1.14/index.shtml**. Ensure your computer is on the same network as the transmitter to allow data collection.
+### 8. Run Automatically on Windows Startup
+To make the script run every time you turn on the computer:
+
+1.  **Using the Startup Folder (Easiest)**:
+    - Press `Win + R`, type `shell:startup`, and press Enter.
+    - Right-click inside the folder and select **New > Shortcut**.
+    - For the location, browse to and select: `c:\Users\jao\projects\automation\run_transmitter_logger.bat`
+    - Click **Next** and **Finish**.
+
+2.  **Using Task Scheduler (More Advanced)**:
+    - Search for "Task Scheduler" in the Start menu.
+    - Click **Create Basic Task**.
+    - Name it "Transmitter Logger".
+    - Set Trigger to **When I log on**.
+    - Set Action to **Start a program**.
+    - Browse to: `c:\Users\jao\projects\automation\run_transmitter_logger.bat`
+    - Click **Finish**.
