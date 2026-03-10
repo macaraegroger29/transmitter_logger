@@ -22,12 +22,12 @@ def read_transmitter():
         driver.get(URL)
         time.sleep(3) # Give the page time to load
 
-        # Read values (Selectors updated for more stability)
-        forward_power = driver.find_element(By.XPATH, "//td[contains(text(),'FORWARD POWER')]/following::input[1]").get_attribute("value")
-        reverse_power = driver.find_element(By.XPATH, "//td[contains(text(),'REVERSE POWER')]/following::input[1]").get_attribute("value")
-        amp_voltage = driver.find_element(By.XPATH, "//td[contains(text(),'AMP VOLTAGE')]/following::input[1]").get_attribute("value")
-        amp_current = driver.find_element(By.XPATH, "//td[contains(text(),'AMP CURRENT')]/following::input[1]").get_attribute("value")
-        amp_temp = driver.find_element(By.XPATH, "//td[contains(text(),'AMP TEMPERATURE')]/following::input[1]").get_attribute("value")
+        # Read values using IDs from the live transmitter page
+        forward_power = driver.find_element(By.ID, "mPf").get_attribute("value")
+        reverse_power = driver.find_element(By.ID, "mPr").get_attribute("value")
+        amp_voltage = driver.find_element(By.ID, "mVg").get_attribute("value")
+        amp_current = driver.find_element(By.ID, "mIg").get_attribute("value")
+        amp_temp = driver.find_element(By.ID, "mCg").get_attribute("value")
 
         data = {
             "Time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
