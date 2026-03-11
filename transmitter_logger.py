@@ -19,7 +19,7 @@ def send_telegram_message(message):
         return # Skip if not configured
     
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
-    data = {"chat_id": CHAT_ID, "text": message}
+    data = {"chat_id": CHAT_ID, "text": message, "parse_mode": "Markdown"}
     try:
         requests.post(url, data=data)
     except Exception as e:
@@ -47,13 +47,28 @@ def read_transmitter():
 
         data = {
             "Time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            "Forward Power (W)": forward_power,
-            "Reverse Power (W)": reverse_power,
-            "Voltage (V)": amp_voltage,
-            "Current (A)": amp_current,
-            "Temperature (C)": amp_temp
+            "Forward Power (W)": f"{forward_power} W",
+            "Reverse Power (W)": f"{reverse_power} W",
+            "Voltage (V)": f"{amp_voltage} V",
+            "Current (A)": f"{amp_current} A",
+            "Temperature (C)": f"{amp_temp} °C"
         }
 
+        # --- WARNING SYSTEM ---
+        try:
+            rev_val = float(reverse_power)
+            temp_val = float(amp_temp)
+            
+            if rev_val >= 1.0 or temp_val >= 30.0:
+                warning_msg = "⚠️ *CRITICAL ALERT*\n"
+                if rev_val >= 1.0:
+                    warning_msg += f"❗️ *High Reverse Power:* {rev_val} W\n"
+                if temp_val >= 30.0:
+                    warning_msg += f"❗️ *High Temperature:* {temp_val} °C\n"
+                send_telegram_message(warning_msg)
+        except (ValueError, TypeError):
+            pass # Skip warning if values aren't numeric
+            
         df = pd.DataFrame([data])
         
         # Log to CSV
@@ -65,11 +80,11 @@ def read_transmitter():
             success_msg = (
                 f"📊 *Transmitter Data Logged*\n"
                 f"Time: {data['Time']}\n"
-                f"FWD: {data['Forward Power (W)']} W\n"
-                f"REV: {data['Reverse Power (W)']} W\n"
-                f"AMP Voltage: {data['Voltage (V)']} V\n"
-                f"AMP Current: {data['Current (A)']} A\n"
-                f"AMP Temp: {data['Temperature (C)']} °C"
+                f"FWD: {data['Forward Power (W)']}\n"
+                f"REV: {data['Reverse Power (W)']}\n"
+                f"AMP Voltage: {data['Voltage (V)']}\n"
+                f"AMP Current: {data['Current (A)']}\n"
+                f"AMP Temp: {data['Temperature (C)']}"
             )
             print(f"[{data['Time']}] Data Logged Successfully.")
             send_telegram_message(success_msg)
